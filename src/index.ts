@@ -20,3 +20,18 @@ export function isTokenExpired(token: string): boolean {
   if (!payload || !payload.exp) return true;
   return Date.now() >= payload.exp * 1000;
 }
+
+// Get time until token expires in seconds
+export function getTokenTTL(token: string): number {
+  const payload = decodeToken(token);
+  if (!payload || !payload.exp) return 0;
+  const remaining = payload.exp * 1000 - Date.now();
+  return Math.max(0, Math.floor(remaining / 1000));
+}
+
+interface JwtPayload {
+  [key: string]: unknown;
+  exp?: number;
+  iat?: number;
+  sub?: string;
+}
