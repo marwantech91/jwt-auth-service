@@ -2,6 +2,13 @@ export { AuthService } from './AuthService';
 export type { TokenPayload, TokenPair, AuthServiceOptions } from './AuthService';
 export { authMiddleware } from './middleware';
 
+export interface JwtPayload {
+  [key: string]: unknown;
+  exp?: number;
+  iat?: number;
+  sub?: string;
+}
+
 // Utility: Extract user from token without verification
 export function decodeToken(token: string): JwtPayload | null {
   try {
@@ -27,11 +34,4 @@ export function getTokenTTL(token: string): number {
   if (!payload || !payload.exp) return 0;
   const remaining = payload.exp * 1000 - Date.now();
   return Math.max(0, Math.floor(remaining / 1000));
-}
-
-interface JwtPayload {
-  [key: string]: unknown;
-  exp?: number;
-  iat?: number;
-  sub?: string;
 }
