@@ -35,3 +35,9 @@ export function getTokenTTL(token: string): number {
   const remaining = payload.exp * 1000 - Date.now();
   return Math.max(0, Math.floor(remaining / 1000));
 }
+
+// Extract the subject claim from a token without verification
+export function getTokenSubject(token: string): string | null {
+  const payload = decodeToken(token);
+  return payload?.sub ?? null;
+}
