@@ -41,3 +41,18 @@ export function getTokenSubject(token: string): string | null {
   const payload = decodeToken(token);
   return payload?.sub ?? null;
 }
+
+// Extract all claims from a token
+export function getTokenClaims(token: string): Record<string, unknown> {
+  const payload = decodeToken(token);
+  if (!payload) return {};
+
+  const { exp, iat, sub, ...claims } = payload;
+  return claims;
+}
+
+// Check if a token has a specific claim
+export function hasTokenClaim(token: string, claim: string): boolean {
+  const payload = decodeToken(token);
+  return payload !== null && claim in payload;
+}
